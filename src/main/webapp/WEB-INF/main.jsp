@@ -36,7 +36,7 @@
                 </form>
             </td>
             <td>
-                <form action="/delete/" method="post">
+                <form action="/delete" method="post">
                     <button name="id" value="${user.id}" type="submit">Delete</button>
                 </form>
             </td>
@@ -53,7 +53,7 @@
         </form>
     </tr>
 </table>
-<form action="/userDeleteAll/" method="post">
+<form action="/userDeleteAll" method="post">
     Delete all Users
     <input type="submit" value="Delete all">
 </form>
