@@ -15,11 +15,14 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "age")
     private int age;
 
-//    @Column(name = "role")
-//    private String role;
+    @Column(name = "role")
+    private String role;
 
     public User() {
     }
@@ -29,17 +32,32 @@ public class User {
         this.age = age;
     }
 
-    public User(String name, int age, String role) {
-        this.name = name;
-        this.age = age;
+//    public User(String name, int age, String role) {
+//        this.name = name;
+//        this.age = age;
 //        this.role = role;
+//    }
+
+    public User(String name, String password, int age, String role) {
+        this.name = name;
+        this.password = password;
+        this.age = age;
+        this.role = role;
     }
 
-    public User(long id, String name, int age) {
+//    public User(long id, String name, int age, String role) {
+//        this.id = id;
+//        this.name = name;
+//        this.age = age;
+//        this.role = role;
+//    }
+
+    public User(long id, String name, String password, int age, String role) {
         this.id = id;
         this.name = name;
         this.age = age;
-//        this.role = role;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -58,6 +76,14 @@ public class User {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public int getAge() {
         return age;
     }
@@ -66,13 +92,13 @@ public class User {
         this.age = age;
     }
 
-//    public String getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(String role) {
-//        this.role = role;
-//    }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -80,13 +106,13 @@ public class User {
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return getAge() == user.getAge() &&
-                getName().equals(user.getName());
-//                &&
-//                getRole().equals(user.getRole());
+                getName().equals(user.getName())
+                &&
+                getRole().equals(user.getRole());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getAge());
+        return Objects.hash(getName(), getAge(), getRole());
     }
 }

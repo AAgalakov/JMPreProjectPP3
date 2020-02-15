@@ -1,38 +1,42 @@
 package DAO;
 
 import model.User;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import util.DBHelper;
+import org.hibernate.*;
 
 import java.util.List;
 
-public class UserHibernateDaoInterface implements DaoInterface {
+public class DaoHibernate implements DaoInterface {
 
-    private DBHelper dbHelper = DBHelper.getInstance();
+    private SessionFactory sessionFactory;
+
+    public DaoHibernate (){ }
+
+    public DaoHibernate(SessionFactory sessionFactory){
+       this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public List<User> getAllUser() {
-        Session session = dbHelper.createSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
             List<User> user = session.createQuery("FROM User").list();
             transaction.commit();
             return user;
         } finally {
-            try {
-                session.close();
-            } catch (HibernateException e) {
-                e.printStackTrace();
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     @Override
     public void addUser(User user) {
-        Session session = dbHelper.createSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
             session.save(user);
@@ -55,7 +59,7 @@ public class UserHibernateDaoInterface implements DaoInterface {
 
     @Override
     public User getUserById(long id) {
-        Session session = dbHelper.createSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
             Query query = session.createQuery("FROM User WHERE id = '" + id + "'");
@@ -79,14 +83,13 @@ public class UserHibernateDaoInterface implements DaoInterface {
     }
 
     @Override
-    public void updateUsersName(long id, String newName) {
-        Session session = dbHelper.createSession();
+    public User getUserByName(String name) {
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            User user = getUserById(id);
-            user.setName(newName);
-            session.update(user);
+            Query query = session.createQuery("FROM User WHERE name = '" + name + "'");
             transaction.commit();
+            return (User) query.uniqueResult();
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -101,15 +104,14 @@ public class UserHibernateDaoInterface implements DaoInterface {
                 }
             }
         }
+        return null;
     }
 
     @Override
-    public void updateUsersAge(long id, int age) {
-        Session session = dbHelper.createSession();
+    public void updateUser(User user) {
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            User user = getUserById(id);
-            user.setAge(age);
             session.update(user);
             transaction.commit();
         } catch (HibernateException e) {
@@ -130,7 +132,7 @@ public class UserHibernateDaoInterface implements DaoInterface {
 
     @Override
     public void deleteUser(long id) {
-        Session session = dbHelper.createSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
             User user = getUserById(id);

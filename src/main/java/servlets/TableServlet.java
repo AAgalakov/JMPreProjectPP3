@@ -10,31 +10,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/"})
-public class MainServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/admin/table"})
+public class TableServlet extends HttpServlet {
 
     private UserService userService = UserService.getInstance();
-
-    private User user = new User();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("users", userService.allUser());
-        getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/table.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("name");
+        String password = req.getParameter("password");
         String age = req.getParameter("age");
-//        String role = req.getParameter("role");
-        if (!(name.isEmpty() | age.isEmpty()) ){//| role.isEmpty()) {
-            user.setName(name);
-            user.setAge(Integer.parseInt(age));
-//            user.setRole(role);
-            userService.addUser(user);
+        String role = req.getParameter("role");
+        if (!(name.isEmpty() | age.isEmpty() | password.isEmpty()) &&
+                userService.addUser(new User(name, password, Integer.parseInt(age), role))) {
+            req.setAttribute("users", userService.allUser());
+            getServletContext().getRequestDispatcher("/WEB-INF/table.jsp").forward(req, resp);
+        } else {
+            req.setAttribute("URL", req.getRequestURL().toString());
+            getServletContext().getRequestDispatcher("/WEB-INF/wrongName.jsp").forward(req, resp);
         }
-        req.setAttribute("users", userService.allUser());
-        getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(req, resp);
     }
 }

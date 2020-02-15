@@ -12,8 +12,10 @@ public interface Service {
 
     boolean addUser(User user);
 
-    boolean updateUser(long id, String name, String age);
+    boolean updateUser(long id, String name, String password, String age, String role);
 
-    boolean deleteUserById(long id);
+    void deleteUserById(long id);
+
+    boolean validateUser(String name, String password);
 
 }

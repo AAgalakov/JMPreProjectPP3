@@ -9,18 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/admin/delete"})
-public class UserDeleteServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/admin/userDeleteAll"})
+public class DeleteAllUserServlet extends HttpServlet {
 
     private UserService userService = UserService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long id = Long.parseLong(req.getParameter("id"));
-        userService.deleteUserById(id);
+        userService.deleteAllUser();//
         resp.setStatus(HttpServletResponse.SC_OK);
-        req.setAttribute("users", userService.allUser());
-        resp.sendRedirect("/admin/table");
+        getServletContext().getRequestDispatcher("/WEB-INF/table.jsp").forward(req, resp);
     }
 }
-
