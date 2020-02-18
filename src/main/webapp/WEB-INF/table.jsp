@@ -21,7 +21,9 @@
     <tr>
         <th> User id</th>
         <th> User name</th>
+        <th> User password</th>
         <th> User age</th>
+        <th> User role</th>
         <th colspan="2"> Action</th>
         <th></th>
     </tr>
@@ -29,31 +31,47 @@
         <tr>
             <td>${user.id}</td>
             <td>${user.name}</td>
+            <td>${user.password}</td>
             <td>${user.age}</td>
+            <td>${user.role}</td>
             <td>
-                <form action="/userUpdate" method="post">
+                <form action="/admin/userUpdate" method="get">
                     <button name="id" value="${user.id}" type="submit">Edit</button>
                 </form>
             </td>
             <td>
-                <form action="/delete" method="post">
+                <form action="/admin/delete" method="post">
                     <button name="id" value="${user.id}" type="submit">Delete</button>
                 </form>
             </td>
         </tr>
     </c:forEach>
     <tr>
-        <form action="/" method="post">
+        <form action="/admin/table" method="post">
             <td></td>
-            <td><input name="name" placeholder="Your Name"/></td>
-            <td><input name="age" placeholder="Your Age" type="number" min=1/></td>
+            <td><input name="name" placeholder="Name"/></td>
+            <td><input name="password" placeholder="Password"/></td>
+            <td><input name="age" placeholder="Age" type="number" min=1/></td>
+            <td style="text-align: center"><select name="role">
+                <option selected="selected">user</option>
+                <option>admin</option>
+            </select></td>
             <td colspan="2">
                 <button>Add new user</button>
             </td>
         </form>
     </tr>
 </table>
-<form action="/userDeleteAll" method="post">
+
+<form action="/user" method="GET">
+    <input type="submit" value="User page">
+</form>
+
+<form action="/logout" method="GET">
+    <input type="submit" value="Log out">
+</form>
+
+<form action="/admin/userDeleteAll" method="post">
     Delete all Users
     <input type="submit" value="Delete all">
 </form>

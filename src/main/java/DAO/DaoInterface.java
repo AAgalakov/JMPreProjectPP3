@@ -12,9 +12,9 @@ public interface DaoInterface {
 
     User getUserById(long id);
 
-    void updateUsersName(long id, String newName);
+    User getUserByName(String name);
 
-    void updateUsersAge(long id, int age);
+    void updateUser (User user);
 
     void deleteUser(long id);
 

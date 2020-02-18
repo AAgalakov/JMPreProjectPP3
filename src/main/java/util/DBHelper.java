@@ -1,7 +1,6 @@
 package util;
 
 import model.User;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -14,31 +13,19 @@ import java.sql.SQLException;
 
 public class DBHelper {
 
-    private static DBHelper dbHelper;
-
-    public static DBHelper getInstance() {
-        if (dbHelper == null) {
-            dbHelper = new DBHelper();
-        }
-        return dbHelper;
-    }
+//    private static DBHelper dbHelper;
+//
+//    public static DBHelper getInstance() {
+//        if (dbHelper == null) {
+//            dbHelper = new DBHelper();
+//        }
+//        return dbHelper;
+//    }
 
     private DBHelper() {
     }
 
-//    public Connection getConnection(){
-//        return null;
-//    }
-
-//    public Configuration getConfiguration(){
-//        return null;
-//    } // почему по условию необходимо передавать configuration, а не сессию?
-
-    public Session createSession(){
-        return createSessionFactory().openSession();
-    }
-
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
 
@@ -60,7 +47,7 @@ public class DBHelper {
         }
     }
 
-    private SessionFactory createSessionFactory() {
+    public static SessionFactory createSessionFactory() {
         Configuration configuration = getMySqlConfigurationHibernate();
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
@@ -69,7 +56,7 @@ public class DBHelper {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    private Configuration getMySqlConfigurationHibernate() {
+    private static Configuration getMySqlConfigurationHibernate() {
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
 
@@ -81,6 +68,4 @@ public class DBHelper {
         configuration.setProperty("hibernate.show_sql", "true");
         return configuration;
     }
-
-
 }
